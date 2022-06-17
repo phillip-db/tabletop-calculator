@@ -1,4 +1,4 @@
-.remove-button {
+.round-button {
   border-radius: 50%;
   padding: 0.5em;
   width: 25px;
@@ -8,4 +8,10 @@
   font-size: 0.7em;
   color: white;
   position: relative;
+}
+
+.grid-container {
+  display: grid;
+  width: 500px;
+  grid-template-columns: auto auto;
 }
