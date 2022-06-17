@@ -41,18 +41,13 @@ class CalculatorApp extends React.Component {
   render() {
     const players = this.state.players;
 
-    const list = players.map((player) => (
-      <li key={player.id}>
-        {player.text}
-        {"\t"}
-        <button onClick={() => this.handleRemove(player.id)}>X</button>
-      </li>
-    ));
-
     return (
       <div>
         <h3>Player List</h3>
-        <ol>{list}</ol>
+        <PlayerList
+          players={players}
+          handleRemove={(id) => this.handleRemove(id)}
+        />
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="new-player">Player Name: </label>
           <input
@@ -64,6 +59,22 @@ class CalculatorApp extends React.Component {
         </form>
       </div>
     );
+  }
+}
+
+class PlayerList extends React.Component {
+  render() {
+    const players = this.props.players;
+
+    const list = players.map((player) => (
+      <li key={player.id}>
+        {player.text}
+        {"\t"}
+        <button onClick={() => this.props.handleRemove(player.id)}>X</button>
+      </li>
+    ));
+
+    return <ol>{list}</ol>;
   }
 }
 
