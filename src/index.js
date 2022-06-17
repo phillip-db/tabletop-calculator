@@ -43,8 +43,6 @@ class CalculatorApp extends React.Component {
 
     return (
       <div>
-        <h3>Game List</h3>
-        <GameList />
         <h3>Player List</h3>
         <PlayerList
           players={players}
@@ -59,6 +57,8 @@ class CalculatorApp extends React.Component {
           />
           <button>Add Player</button>
         </form>
+        <h3>Game List</h3>
+        <GameList />
       </div>
     );
   }
