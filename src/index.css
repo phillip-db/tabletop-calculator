@@ -4,6 +4,8 @@
   width: 25px;
   height: 25px;
   border: none;
+  margin-left: 5px;
+  margin-right: 5px;
   background-color: gray;
   font-size: 0.7em;
   color: white;
@@ -28,7 +30,6 @@
 }
 
 .input-numerical {
-  margin-left: 10px;
   width: 30px;
 }
 

@@ -179,6 +179,12 @@ class Scoreboard extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  updateIntValues(i, amount) {
+    let intValues = [...this.state.intValues];
+    intValues[i] = (intValues[i] ? parseInt(intValues[i]) : 0) + amount;
+    this.setState({ intValues });
+  }
+
   handleIntChange(i, e) {
     let intValues = [...this.state.intValues];
     intValues[i] = e.target.value;
@@ -212,6 +218,13 @@ class Scoreboard extends React.Component {
     const playerList = players.map((player, i) => (
       <div key={player.id} className="grid-item">
         {player.text}
+        <button
+          className="round-button"
+          type="button"
+          onClick={() => this.updateIntValues(i, -1)}
+        >
+          -1
+        </button>
         <input
           className="input-numerical"
           type="number"
@@ -219,6 +232,13 @@ class Scoreboard extends React.Component {
           value={this.state.intValues[i] || 0}
           onChange={this.handleIntChange.bind(this, i)}
         ></input>
+        <button
+          className="round-button"
+          type="button"
+          onClick={() => this.updateIntValues(i, 1)}
+        >
+          +1
+        </button>
         <input
           className="input-bool"
           type="checkbox"
