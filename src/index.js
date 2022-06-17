@@ -43,6 +43,8 @@ class CalculatorApp extends React.Component {
 
     return (
       <div>
+        <h3>Game List</h3>
+        <GameList />
         <h3>Player List</h3>
         <PlayerList
           players={players}
@@ -70,11 +72,29 @@ class PlayerList extends React.Component {
       <li key={player.id}>
         {player.text}
         {"\t"}
-        <button onClick={() => this.props.handleRemove(player.id)}>X</button>
+        <button
+          className="remove-button"
+          onClick={() => this.props.handleRemove(player.id)}
+        >
+          X
+        </button>
       </li>
     ));
 
     return <ol>{list}</ol>;
+  }
+}
+
+class GameList extends React.Component {
+  render() {
+    const gameOhHell = "Oh Hell";
+    return (
+      <div>
+        <button onClick={() => console.log("Clicked " + gameOhHell)}>
+          {gameOhHell}
+        </button>
+      </div>
+    );
   }
 }
 
