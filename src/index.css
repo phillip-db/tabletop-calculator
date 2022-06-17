@@ -1,3 +1,8 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
 .round-button {
   border-radius: 50%;
   padding: 0.5em;
@@ -12,15 +17,25 @@
   position: relative;
 }
 
+.container {
+  width: min(100vw, 500px);
+}
+
+.scoreboard-player-name {
+  margin-right: 10px;
+  display: inline-block;
+  width: 50px;
+}
+
 .grid-container {
   display: grid;
-  width: 500px;
-  grid-template-columns: auto auto;
+  width: auto;
+  grid-template-columns: 2fr 1fr;
   color: #fff;
 }
 
 .grid-col > div:nth-child(even) {
-  background: rgba(140, 139, 139, 0.5);
+  background: rgba(66, 65, 65, 0.5);
 }
 
 .grid-item {
@@ -31,6 +46,11 @@
 
 .input-numerical {
   width: 30px;
+}
+
+.input-bool {
+  vertical-align: middle;
+  margin-left: 10px;
 }
 
 .button-submit-round {

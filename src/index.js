@@ -106,7 +106,7 @@ class CalculatorApp extends React.Component {
     const scoreboardRender = this.state.currentGame ? scoreboard : null;
 
     return (
-      <div>
+      <div className="container">
         <h3>Player List</h3>
         <PlayerList
           players={this.state.players}
@@ -217,7 +217,7 @@ class Scoreboard extends React.Component {
 
     const playerList = players.map((player, i) => (
       <div key={player.id} className="grid-item">
-        {player.text}
+        <span className="scoreboard-player-name">{player.text}</span>
         <button
           className="round-button"
           type="button"
