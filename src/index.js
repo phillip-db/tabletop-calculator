@@ -51,7 +51,12 @@ class CalculatorApp extends React.Component {
     console.log(gameName);
     const newGame = this.gameList.filter((entry) => entry.name === gameName)[0];
     console.log(newGame);
+
+    const players = this.state.players.slice();
+    for (var i = 0; i < players.length; i++) players[i].score = 0;
+
     this.setState({
+      players: players,
       currentGame: newGame,
       currentRound: 1,
     });
@@ -78,7 +83,6 @@ class CalculatorApp extends React.Component {
       const int = intValues[i] ? parseInt(intValues[i]) : 0;
       const bool = boolValues[i] ? boolValues[i] : false;
       const roundScore = int === 0 ? 5 + this.state.currentRound : 10 + int;
-      console.log(intValues + " " + boolValues);
       this.updateScore(id, bool ? roundScore : 0);
     }
   }
