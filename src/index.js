@@ -174,11 +174,11 @@ class Scoreboard extends React.Component {
 
     return (
       <div className="grid-container">
-        <div>
+        <div className="grid-col">
           <div className="grid-item grid-header">Player</div>
           {playerList}
         </div>
-        <div>
+        <div className="grid-col">
           <div className="grid-item grid-header">Score</div>
           {scoreList}
         </div>
