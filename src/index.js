@@ -9,9 +9,16 @@ class CalculatorApp extends React.Component {
       players: [],
       text: "",
       currentGame: null,
+      currentRound: 1,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.gameList = [
+      {
+        name: "Oh Hell",
+        game: <GameOhHell />,
+      },
+    ];
   }
 
   handleChange(e) {
@@ -41,8 +48,12 @@ class CalculatorApp extends React.Component {
   }
 
   changeGame(gameName) {
+    console.log(gameName);
+    const newGame = this.gameList.filter((entry) => entry.name === gameName)[0];
+    console.log(newGame);
     this.setState({
-      currentGame: gameName,
+      currentGame: newGame,
+      currentRound: 1,
     });
   }
 
@@ -61,22 +72,44 @@ class CalculatorApp extends React.Component {
     });
   }
 
+  updateAllScores(intValues, boolValues) {
+    for (var i = 0; i < this.state.players.length; i++) {
+      const id = this.state.players[i].id;
+      const int = intValues[i] ? parseInt(intValues[i]) : 0;
+      const bool = boolValues[i] ? boolValues[i] : false;
+      const roundScore = int === 0 ? 5 + this.state.currentRound : 10 + int;
+      console.log(intValues + " " + boolValues);
+      this.updateScore(id, bool ? roundScore : 0);
+    }
+  }
+
+  incrementRound() {
+    this.setState({ currentRound: this.state.currentRound + 1 });
+  }
+
   render() {
-    const players = this.state.players;
-    const currentGame = this.state.currentGame
-      ? this.state.currentGame
+    const currentGameName = this.state.currentGame
+      ? this.state.currentGame.name + " || Round: " + this.state.currentRound
       : "No game selected";
-    const gameList = [
-      { name: "Oh Hell" },
-      { name: "Spades" },
-      { name: "Hearts" },
-    ];
+    const scoreboard = (
+      <Scoreboard
+        players={this.state.players}
+        updateScore={(id, amount) => this.updateScore(id, amount)}
+        updateAllScores={(intValues, boolValues) =>
+          this.updateAllScores(intValues, boolValues)
+        }
+        currentGame={this.state.currentGame}
+        incrementRound={() => this.incrementRound()}
+        currentRound={this.state.currentRound}
+      />
+    );
+    const scoreboardRender = this.state.currentGame ? scoreboard : null;
 
     return (
       <div>
         <h3>Player List</h3>
         <PlayerList
-          players={players}
+          players={this.state.players}
           handleRemove={(id) => this.handleRemove(id)}
         />
         <form onSubmit={this.handleSubmit}>
@@ -90,15 +123,12 @@ class CalculatorApp extends React.Component {
         </form>
         <h3>Game List</h3>
         <GameList
-          gameList={gameList}
+          gameList={this.gameList}
           changeGame={(newGame) => this.changeGame(newGame)}
         />
         <h3>Current Game</h3>
-        <h4>{currentGame}</h4>
-        <Scoreboard
-          players={players}
-          updateScore={(id, amount) => this.updateScore(id, amount)}
-        />
+        <h4>{currentGameName}</h4>
+        {scoreboardRender}
       </div>
     );
   }
@@ -143,12 +173,58 @@ class GameList extends React.Component {
 class GameOhHell extends React.Component {}
 
 class Scoreboard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { intValues: [], boolValues: [] };
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleIntChange(i, e) {
+    let intValues = [...this.state.intValues];
+    intValues[i] = e.target.value;
+    this.setState({ intValues });
+  }
+
+  handleBoolChange(i, e) {
+    let boolValues = [...this.state.boolValues];
+    boolValues[i] = e.target.checked;
+    this.setState({ boolValues });
+    console.log(
+      "Bool change " + this.state.boolValues[i] + " " + e.target.value
+    );
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    console.log("Submit!");
+
+    this.props.updateAllScores(this.state.intValues, this.state.boolValues);
+    this.setState({
+      intValues: [],
+      boolValues: [],
+    });
+    this.props.incrementRound();
+  }
+
   render() {
     const players = this.props.players;
 
-    const playerList = players.map((player) => (
+    const playerList = players.map((player, i) => (
       <div key={player.id} className="grid-item">
         {player.text}
+        <input
+          className="input-numerical"
+          type="number"
+          min="0"
+          value={this.state.intValues[i] || 0}
+          onChange={this.handleIntChange.bind(this, i)}
+        ></input>
+        <input
+          className="input-bool"
+          type="checkbox"
+          checked={this.state.boolValues[i] || false}
+          onChange={this.handleBoolChange.bind(this, i)}
+        ></input>
       </div>
     ));
 
@@ -157,6 +233,7 @@ class Scoreboard extends React.Component {
         <button
           className="round-button"
           onClick={() => this.props.updateScore(player.id, -1)}
+          type="button"
         >
           -1
         </button>
@@ -166,6 +243,7 @@ class Scoreboard extends React.Component {
         <button
           className="round-button"
           onClick={() => this.props.updateScore(player.id, 1)}
+          type="button"
         >
           +1
         </button>
@@ -173,16 +251,19 @@ class Scoreboard extends React.Component {
     ));
 
     return (
-      <div className="grid-container">
-        <div className="grid-col">
-          <div className="grid-item grid-header">Player</div>
-          {playerList}
+      <form onSubmit={this.handleSubmit}>
+        <div className="grid-container">
+          <div className="grid-col">
+            <div className="grid-item grid-header">Player</div>
+            {playerList}
+          </div>
+          <div className="grid-col">
+            <div className="grid-item grid-header">Score</div>
+            {scoreList}
+            <button className="button-submit-round">Submit</button>
+          </div>
         </div>
-        <div className="grid-col">
-          <div className="grid-item grid-header">Score</div>
-          {scoreList}
-        </div>
-      </div>
+      </form>
     );
   }
 }

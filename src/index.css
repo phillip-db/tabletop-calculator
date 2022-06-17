@@ -26,3 +26,12 @@
   background: #000;
   padding: 10px;
 }
+
+.input-numerical {
+  margin-left: 10px;
+  width: 30px;
+}
+
+.button-submit-round {
+  float: right;
+}
